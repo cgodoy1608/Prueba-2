@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: API para gestión de dispositivos en campus
+  version: "1.0"
+  description: API para la gestión de dispositivos en diferentes campus
+
+paths:
+  /:
+    get:
+      summary: Obtener mensaje de bienvenida
+      responses:
+        "200":
+          description: Mensaje de bienvenida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /campus/:
+    get:
+      summary: Listar todos los campus
+      responses:
+        "200":
+          description: Lista de campus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campuses:
+                    type: array
+                    items:
+                      type: string
+
+  /devices/{campus_id}:
+    get:
+      summary: Ver dispositivos en un campus específico
+      parameters:
+        - name: campus_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: ID del campus
+      responses:
+        "200":
+          description: Lista de dispositivos en el campus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  devices:
+                    type: array
+                    items:
+                      type: string
+        "400":
+          description: ID de campus no válido
+        "404":
+          description: Archivo de dispositivos no encontrado
+
+    post:
+      summary: Añadir un dispositivo a un campus
+      parameters:
+        - name: campus_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: ID del campus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                device_type:
+                  type: string
+                  description: Tipo de dispositivo
+                device_name:
+                  type: string
+                  description: Nombre del dispositivo
+                hierarchy:
+                  type: string
+                  description: Jerarquía del dispositivo
+                ip_address:
+                  type: string
+                  description: Dirección IP del dispositivo
+                services:
+                  type: array
+                  items:
+                    type: string
+                  description: Lista de servicios del dispositivo
+      responses:
+        "200":
+          description: Dispositivo añadido con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: ID de campus no válido
+
+    delete:
+      summary: Borrar todos los dispositivos en un campus
+      parameters:
+        - name: campus_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: ID del campus
+      responses:
+        "200":
+          description: Todos los dispositivos del campus han sido borrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: ID de campus no válido
+        "404":
+          description: Archivo de dispositivos no encontrado
+
+  /campus/{campus_id}:
+    delete:
+      summary: Eliminar un campus de la lista
+      parameters:
+        - name: campus_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: ID del campus
+      responses:
+        "200":
+          description: Campus eliminado de la lista
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: ID de campus no válido
